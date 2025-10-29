@@ -18,14 +18,28 @@ public class UserService {
     }
 
 
-    public User findUserByEmail(String email){
-        return  repository.findByEmail(email).orElseThrow(
+    public User findUserByEmail(String email) {
+        return repository.findByEmail(email).orElseThrow(
                 () -> new RuntimeException("Email não encontrado"));
     }
 
-    public void deleteUserByEmail(String email){
+    public void deleteUserByEmail(String email) {
         repository.deleteByEmail(email);
+
     }
 
+    public void updateUserByID(Integer id, User user) {
+        User userEntity = repository.findById(id).orElseThrow(() ->
+                new RuntimeException("User not afound"));
+        User updateUser = User.builder()
+
+                .email(user.getEmail() != null ? user.getEmail() : userEntity.getEmail())
+                .name(user.getName() != null ? user.getEmail() : userEntity.getEmail())
+                .id(userEntity.getId())
+                .build();
+
+    }
+
+    //27:15
 
 }

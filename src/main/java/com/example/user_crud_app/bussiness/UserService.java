@@ -13,33 +13,32 @@ public class UserService {
         this.repository = repository;
     }
 
-    public void saveUser(User user) {
+    public void saveUser(User user){
         repository.saveAndFlush(user);
     }
 
-
-    public User findUserByEmail(String email) {
+    public User findUserByEmail(String email){
         return repository.findByEmail(email).orElseThrow(
-                () -> new RuntimeException("Email não encontrado"));
+                () -> new RuntimeException("Email not found")
+        );
     }
 
-    public void deleteUserByEmail(String email) {
+    public void deleteUserByEmail(String email){
         repository.deleteByEmail(email);
-
     }
 
-    public void updateUserByID(Integer id, User user) {
+    public static void updateUserById(Integer id, User user){
         User userEntity = repository.findById(id).orElseThrow(() ->
-                new RuntimeException("User not afound"));
-        User updateUser = User.builder()
-
-                .email(user.getEmail() != null ? user.getEmail() : userEntity.getEmail())
-                .name(user.getName() != null ? user.getEmail() : userEntity.getEmail())
+                new RuntimeException("User not found"));
+        User updatedUser = User.builder()
+                .email(user.getEmail() != null ? user.getEmail() :
+                        userEntity.getEmail())
+                .name(user.getName() != null ? user.getName() :
+                        userEntity.getName())
                 .id(userEntity.getId())
                 .build();
 
+        repository.saveAndFlush(updatedUser);
     }
-
-    //27:15
-
 }
+
